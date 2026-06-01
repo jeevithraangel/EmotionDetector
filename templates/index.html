@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Emotion Detector</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container{
+    width:700px;
+    max-width:90%;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(15px);
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    color:white;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+h1{
+    margin-bottom:10px;
+    font-size:38px;
+}
+
+.subtitle{
+    margin-bottom:25px;
+    font-size:18px;
+    opacity:0.9;
+}
+
+#emoji{
+    font-size:90px;
+    margin-bottom:20px;
+    transition:0.3s;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    outline:none;
+}
+
+button{
+    margin-top:15px;
+    padding:12px 25px;
+    border:none;
+    border-radius:12px;
+    background:white;
+    color:#333;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:translateY(-3px);
+}
+
+#result{
+    margin-top:25px;
+    background:rgba(255,255,255,0.2);
+    padding:20px;
+    border-radius:15px;
+    text-align:left;
+    min-height:120px;
+}
+
+.result-title{
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.footer{
+    margin-top:20px;
+    font-size:14px;
+    opacity:0.8;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>😊 Emotion Detector</h1>
+
+    <p class="subtitle">
+        Analyze emotions from text using Python and Flask
+    </p>
+
+    <div id="emoji">😐</div>
+
+    <input
+        type="text"
+        id="textInput"
+        placeholder="Enter your sentence here...">
+
+    <button onclick="analyzeEmotion()">
+        Analyze Emotion
+    </button>
+
+    <div id="result">
+
+        <h3 class="result-title">
+            Emotion Analysis Result
+        </h3>
+
+        Enter a sentence and click Analyze.
+
+    </div>
+
+    <div class="footer">
+        Developed by Jeevithra | Emotion Detector Project
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='mywebscript.js') }}"></script>
+
+</body>
+</html>
