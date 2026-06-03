@@ -1,8 +1,39 @@
-def emotion_detector(text):
-    if text is None or text.strip() == "":
+import requests
+
+def emotion_detector(text_to_analyse):
+    url = "https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict"
+
+    headers = {
+        "grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock"
+    }
+
+    json_input = {
+        "raw_document": {
+            "text": text_to_analyse
+        }
+    }
+
+    response = requests.post(url, json=json_input, headers=headers)
+
+    if response.status_code == 200:
+        formatted_response = response.json()
+
+        emotions = formatted_response["emotionPredictions"][0]["emotion"]
+
+        output = {
+            "anger": emotions.get("anger"),
+            "disgust": emotions.get("disgust"),
+            "fear": emotions.get("fear"),
+            "joy": emotions.get("joy"),
+            "sadness": emotions.get("sadness")
+        }
+
+        output["dominant_emotion"] = max(output, key=output.get)
+
+        return output
+
+    else:
         return {
-            "status_code": 400,
-            "error": "Invalid input. Text cannot be empty.",
             "anger": None,
             "disgust": None,
             "fear": None,
@@ -10,45 +41,3 @@ def emotion_detector(text):
             "sadness": None,
             "dominant_emotion": None
         }
-
-    text = text.lower()
-
-    emotions = {
-        "anger": 0,
-        "disgust": 0,
-        "fear": 0,
-        "joy": 0,
-        "sadness": 0
-    }
-
-    joy_words = ["happy", "joy", "good", "great", "love"]
-    sad_words = ["sad", "cry", "unhappy"]
-    anger_words = ["angry", "mad", "hate"]
-    fear_words = ["fear", "scared", "danger"]
-    disgust_words = ["disgust", "gross"]
-
-    words = text.split()
-
-    for word in words:
-        if word in joy_words:
-            emotions["joy"] += 1
-        if word in sad_words:
-            emotions["sadness"] += 1
-        if word in anger_words:
-            emotions["anger"] += 1
-        if word in fear_words:
-            emotions["fear"] += 1
-        if word in disgust_words:
-            emotions["disgust"] += 1
-
-    dominant_emotion = max(emotions, key=emotions.get)
-
-    return {
-        "status_code": 200,
-        "anger": emotions["anger"],
-        "disgust": emotions["disgust"],
-        "fear": emotions["fear"],
-        "joy": emotions["joy"],
-        "sadness": emotions["sadness"],
-        "dominant_emotion": dominant_emotion
-    }
