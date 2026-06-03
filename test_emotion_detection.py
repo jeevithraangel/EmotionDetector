@@ -1,10 +1,20 @@
+import unittest
 from EmotionDetection.emotion_detection import emotion_detector
 
-print("Test 1:")
-print(emotion_detector("I am very happy today"))
+class TestEmotionDetector(unittest.TestCase):
 
-print("\nTest 2:")
-print(emotion_detector("I feel sad and lonely"))
+    def test_joy(self):
+        result = emotion_detector("I am very happy")
+        self.assertEqual(result["dominant_emotion"], "joy")
 
-print("\nTest 3:")
-print(emotion_detector("I am scared and worried"))
+    def test_sadness(self):
+        result = emotion_detector("I am very sad")
+        self.assertEqual(result["dominant_emotion"], "sadness")
+
+    def test_fear(self):
+        result = emotion_detector("I am scared of danger")
+        self.assertEqual(result["dominant_emotion"], "fear")
+
+
+if __name__ == "__main__":
+    unittest.main()
