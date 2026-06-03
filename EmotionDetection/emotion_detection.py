@@ -1,4 +1,16 @@
 def emotion_detector(text):
+    if text is None or text.strip() == "":
+        return {
+            "status_code": 400,
+            "error": "Invalid input. Text cannot be empty.",
+            "anger": None,
+            "disgust": None,
+            "fear": None,
+            "joy": None,
+            "sadness": None,
+            "dominant_emotion": None
+        }
+
     text = text.lower()
 
     emotions = {
@@ -9,11 +21,11 @@ def emotion_detector(text):
         "sadness": 0
     }
 
-    joy_words = ["happy", "joy", "good", "great", "excellent", "love"]
-    sad_words = ["sad", "cry", "unhappy", "bad"]
+    joy_words = ["happy", "joy", "good", "great", "love"]
+    sad_words = ["sad", "cry", "unhappy"]
     anger_words = ["angry", "mad", "hate"]
-    fear_words = ["fear", "scared", "danger", "worried"]
-    disgust_words = ["disgust", "gross", "dirty"]
+    fear_words = ["fear", "scared", "danger"]
+    disgust_words = ["disgust", "gross"]
 
     words = text.split()
 
@@ -29,11 +41,10 @@ def emotion_detector(text):
         if word in disgust_words:
             emotions["disgust"] += 1
 
-    # Find dominant emotion
     dominant_emotion = max(emotions, key=emotions.get)
 
-    # Return formatted output
     return {
+        "status_code": 200,
         "anger": emotions["anger"],
         "disgust": emotions["disgust"],
         "fear": emotions["fear"],
