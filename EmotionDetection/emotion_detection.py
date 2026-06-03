@@ -1,5 +1,4 @@
 def emotion_detector(text):
-
     text = text.lower()
 
     emotions = {
@@ -10,33 +9,27 @@ def emotion_detector(text):
         "sadness": 0
     }
 
-    if any(word in text for word in ["happy", "good", "great", "love"]):
-        emotions["joy"] = 1
+    joy_words = ["happy", "joy", "good", "great", "excellent"]
+    sad_words = ["sad", "cry", "bad", "unhappy"]
+    anger_words = ["angry", "mad", "hate"]
+    fear_words = ["fear", "scared", "danger"]
+    disgust_words = ["disgust", "gross"]
 
-    if any(word in text for word in ["sad", "lonely", "unhappy"]):
-        emotions["sadness"] = 1
+    words = text.split()
 
-    if any(word in text for word in ["angry", "mad", "hate"]):
-        emotions["anger"] = 1
+    for w in words:
+        if w in joy_words:
+            emotions["joy"] += 1
+        if w in sad_words:
+            emotions["sadness"] += 1
+        if w in anger_words:
+            emotions["anger"] += 1
+        if w in fear_words:
+            emotions["fear"] += 1
+        if w in disgust_words:
+            emotions["disgust"] += 1
 
-    if any(word in text for word in ["fear", "scared", "danger"]):
-        emotions["fear"] = 1
+    dominant = max(emotions, key=emotions.get)
 
-    if any(word in text for word in ["disgust", "gross", "dirty"]):
-        emotions["disgust"] = 1
-
-    max_value = max(emotions.values())
-
-    if max_value == 0:
-        emotions["dominant_emotion"] = "neutral"
-    else:
-        emotions["dominant_emotion"] = max(emotions, key=emotions.get)
-
-    return {
-    "anger": emotions["anger"],
-    "disgust": emotions["disgust"],
-    "fear": emotions["fear"],
-    "joy": emotions["joy"],
-    "sadness": emotions["sadness"],
-    "dominant_emotion": emotions["dominant_emotion"]
-}
+    emotions["dominant_emotion"] = dominant
+    return emotions
