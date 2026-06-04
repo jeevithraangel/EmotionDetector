@@ -13,9 +13,31 @@ def emotion_detector(text_to_analyse):
         }
     }
 
-    response = requests.post(url, json=body, headers=headers)
+    try:
+        response = requests.post(url, json=body, headers=headers, timeout=30)
+        response.raise_for_status()
 
-    if response.status_code != 200:
+        data = response.json()
+        emotions = data["emotionPredictions"][0]["emotion"]
+
+        result = {
+            "anger": emotions.get("anger", 0),
+            "disgust": emotions.get("disgust", 0),
+            "fear": emotions.get("fear", 0),
+            "joy": emotions.get("joy", 0),
+            "sadness": emotions.get("sadness", 0)
+        }
+
+        # correct dominant emotion calculation
+        result["dominant_emotion"] = max(
+            result,
+            key=lambda x: result[x]
+        )
+
+        return result
+
+    except Exception as e:
+        print("ERROR:", e)
         return {
             "anger": None,
             "disgust": None,
@@ -24,25 +46,3 @@ def emotion_detector(text_to_analyse):
             "sadness": None,
             "dominant_emotion": None
         }
-
-    data = response.json()
-
-    emotions = data["emotionPredictions"][0]["emotion"]
-
-    anger = emotions.get("anger", 0)
-    disgust = emotions.get("disgust", 0)
-    fear = emotions.get("fear", 0)
-    joy = emotions.get("joy", 0)
-    sadness = emotions.get("sadness", 0)
-
-    result = {
-        "anger": anger,
-        "disgust": disgust,
-        "fear": fear,
-        "joy": joy,
-        "sadness": sadness
-    }
-
-    result["dominant_emotion"] = max(result, key=result.get)
-
-    return result
